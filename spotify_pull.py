@@ -118,6 +118,8 @@ def get_artist(artist_info, artists_dict):
      return artists_dict
      
 def get_album(spotify, album_id, albums_dict):
+     if query_sql('select count(*) from albums where album_id='+album_id) != 0:
+          return
      time.sleep(2)
      album_info = spotify.album(album_id)
      album_name = clean_string(album_info['name'])
@@ -133,7 +135,6 @@ def get_album(spotify, album_id, albums_dict):
      albums_dict[album_id] = album_dict
      put_album_sql(album_dict)
      get_album_tracks(spotify, album_id)
-     return albums_dict
 
 def get_track_popularity(spotify, track_id):
      track_info = spotify.track(track_id)
@@ -271,7 +272,6 @@ def main():
                      'Ed Sheeran', 'The Weeknd', 'Drake',
                      'Coldplay', 'Maroon 5', 'Imagine Dragons']
 
-     
      for name in artist_names:
           artists_dict = get_artist_from_name(spotify, name, artists_dict)
      
@@ -281,12 +281,9 @@ def main():
      genre_sql = create_art_genre_sql(artists_dict)
      insert_sql(genre_sql)
 
-     count = 0
-     total = len(artists_dict)
      for artist_id in artists_dict:
           print "Getting albums for artist: "+artists_dict[artist_id]['name']
-          albums_dict = get_artist_albums(spotify, artist_id)
-          count += 1
+          get_artist_albums(spotify, artist_id)
 
      clean_database(spotify)
      total_end = time.time()
