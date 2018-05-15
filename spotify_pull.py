@@ -231,33 +231,8 @@ def update_artists(spotify):
 
      print "Done updating artists"
 
-def remove_duplicates(spotify):
-
-     genre_sql = ['create table temp_genre like artist_genres',
-                  'insert temp_genre select * from artist_genres',
-                  'delete from artist_genres where art_genre_id not in ' \
-                  '(select min(temp.art_genre_id) from temp_genre temp ' \
-                  'group by temp.artist_id, temp.genre)',
-                  'drop table temp_genre']
-                  
-     
-     insert_sql("delete from artist_genres where art_genre_id not in " \
-                "(select min(temp.art_genre_id) from (select * from artist_genres) temp " \
-                "group by genre)")
-     
-     insert_sql("delete from album_artists where album_art_id not in " \
-                "(select min(temp.id) from (select * from album_artists) temp " \
-                "group by temp.album_id, temp.artist_id)")
-
-     insert_sql("delete from track_artists where track_art_id not in " \
-                "(select min(temp.track_art_id) from (select * from track_artists) temp " \
-                "group by temp.track_id, temp.artist_id)")
-     
-     
-
 def clean_database(spotify):
      update_artists(spotify)
-     #remove_duplicates(spotify)
 
 def main():
      total_start = time.time()

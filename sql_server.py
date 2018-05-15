@@ -61,29 +61,26 @@ def create_db():
      cursor.execute(track_sql)
 
      artist_genres_sql = "create table artist_genres (" \
-                       "art_genre_id int NOT NULL AUTO_INCREMENT," \
-                       "artist_id varchar(30)," \
-                       "genre varchar(255)," \
-                       "PRIMARY KEY (art_genre_id)," \
+                       "artist_id varchar(30) NOT NULL," \
+                       "genre varchar(255) NOT NULL," \
+                       "PRIMARY KEY (artist_id, genre)," \
                        "FOREIGN KEY (artist_id) REFERENCES Artists (artist_id))"
 
      cursor.execute(artist_genres_sql)
 
      track_artists_sql = "create table track_artists (" \
-                       "track_art_id int NOT NULL AUTO_INCREMENT," \
                        "track_id varchar(30)," \
                        "artist_id varchar(30)," \
-                       "PRIMARY KEY (track_art_id)," \
+                       "PRIMARY KEY (track_id, artist_id)," \
                        "FOREIGN KEY (track_id) REFERENCES Tracks (track_id)," \
                        "FOREIGN KEY (artist_id) REFERENCES Artists (artist_id))"
 
      cursor.execute(track_artists_sql)
 
      album_artists_sql = "create table album_artists (" \
-                       "album_art_id int NOT NULL AUTO_INCREMENT," \
                        "album_id varchar(30)," \
                        "artist_id varchar(30)," \
-                       "PRIMARY KEY (album_art_id)," \
+                       "PRIMARY KEY (album_id, artist_id)," \
                        "FOREIGN KEY (album_id) REFERENCES Albums (album_id)," \
                        "FOREIGN KEY (artist_id) REFERENCES Artists (artist_id))"
 
